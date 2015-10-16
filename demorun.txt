@@ -1,0 +1,172 @@
+EXAMPLE SHELL SESSION TO PRODUCE AN X.509 CERTIFICATE FOR A KERBEROS SERVICE
+============================================================================
+
+#
+# Below, we login to Kerberos, and retrieve a get ticket, in this case from the
+# KDC because it is not locally cached.  We then construct an X.509 certificate
+# from it.
+#
+# The following resources can help you to decode the non-encrypted portions:
+# https://tools.ietf.org/html/rfc4120
+# https://tools.ietf.org/html/rfc3280
+# http://luca.ntop.org/Teaching/Appunti/asn1.html
+#
+# From: Rick van Rein <rick@openfortress.nl>
+#
+
+shell$ kinit -l 15m rick@ARPA2.NET
+
+Password for rick@ARPA2.NET:
+
+shell$ klist
+
+Ticket cache: FILE:/tmp/krb5cc_p18990
+Default principal: rick@ARPA2.NET
+
+Valid starting     Expires            Service principal
+10/16/15 12:43:42  10/16/15 12:58:39  krbtgt/ARPA2.NET@ARPA2.NET
+
+shell$ ./ticket2cert xmpp/xmpp.arpa2.net@ARPA2.NET
+
+-----BEGIN CLIENT PRINCIPAL-----
+NameType: 1
+Name_0: rick
+Realm: ARPA2.NET
+-----END CLIENT PRINCIPAL-----
+
+-----BEGIN SERVICE PRINCIPAL-----
+NameType: 1
+Name_0: xmpp
+Name_1: xmpp.arpa2.net
+Realm: ARPA2.NET
+-----END SERVICE PRINCIPAL-----
+
+-----BEGIN TICKET HEXDUMP-----
+61 82 01 4c 30 82 01 48 a0 03 02 01 05 a1 0b 1b
+09 41 52 50 41 32 2e 4e 45 54 a2 21 30 1f a0 03
+02 01 01 a1 18 30 16 1b 04 78 6d 70 70 1b 0e 78
+6d 70 70 2e 61 72 70 61 32 2e 6e 65 74 a3 82 01
+0f 30 82 01 0b a0 03 02 01 12 a1 03 02 01 03 a2
+81 fe 04 81 fb 23 60 de b8 9f 15 9f 51 d6 95 8a
+c1 02 7b 85 dd ad 8d 73 98 a1 62 c7 85 26 bb a3
+d9 45 f4 ce 05 fe f6 ef 24 34 b5 f5 37 98 65 a9
+91 e5 78 aa 05 02 f1 53 55 29 71 60 09 6a 7f af
+ab 01 68 a3 e8 84 84 97 db 21 7c 60 a5 e2 4d 4a
+97 8d 43 cc 04 fb 88 88 87 77 3e 70 7c c3 75 9d
+09 02 fc aa d7 7e 0b 9d 0b c9 69 99 6f 56 19 c7
+6a 02 4b ae 2b ed 32 52 8b e6 5c ef 95 27 de 28
+39 8a 00 8e 07 7d 7b 81 cf df 0a e9 db bb 0f 0a
+0a 59 48 ef c5 09 e1 10 73 f0 45 01 c2 cd d6 91
+4b c6 c6 b0 c0 3c 8c 9e bc 83 fe f3 ab 2c fe 99
+14 81 aa 92 37 47 50 5b 0b fc 62 8c c1 cb 85 f1
+37 db 6b e0 7c d7 eb 71 4c 95 86 2d 32 8b ec 61
+d6 75 3a a5 f3 f5 1c 71 db 17 8b 75 5f 78 a7 78
+a5 0c 1b 5f c2 26 21 12 08 27 11 87 cb fc 2e 31
+73 28 64 95 19 a1 f1 e2 75 14 5e 93 44 24 3d 86
+-----END TICKET HEXDUMP-----
+
+-----BEGIN AUTHENTICATOR HEXDUMP-----
+62 62 30 60 a0 03 02 01 05 a1 0b 1b 09 41 52 50
+41 32 2e 4e 45 54 a2 11 30 0f a0 03 02 01 01 a1
+08 30 06 1b 04 72 69 63 6b a3 1f 30 1d a0 03 02
+01 0e a1 16 04 14 2d 8f bd 0b 45 17 24 60 01 0c
+6d d2 aa 61 37 30 93 43 17 b9 a4 05 02 03 08 fd
+cf a5 11 18 0f 32 30 31 35 31 30 31 36 31 32 34
+34 31 31 5a
+-----END AUTHENTICATOR HEXDUMP-----
+
+-----BEGIN ENCAUTHENTICATOR HEXDUMP-----
+ae ab e4 69 87 51 25 ac 1b 6a 13 99 c1 23 60 08
+b7 8a de 7b c3 b1 b7 4e 0d b4 33 83 9c b7 cf 66
+0b cc ab 90 b6 96 1a 2e 81 7f ac c8 60 32 80 6c
+ba 8b 57 dc 31 f8 5d c6 bf 82 65 c0 9a 29 2e 9d
+27 7d eb e5 9c 01 80 63 0f 6e 89 6d 47 d3 05 c6
+05 56 d1 ad 1b 0e 89 12 e2 02 7a ca a5 1d c4 4f
+04 7f 39 1e 63 f3 ee 69 5b ee fd 8b c4 45 0b 5c
+3b 47 c8 96 78 39 b5 45 3d 45 de c8 e9 de 26 6f
+-----END ENCAUTHENTICATOR HEXDUMP-----
+
+-----BEGIN TO-BE-SIGNED-CERTIFICATE HEXDUMP-----
+30 82 01 b7 a0 03 02 01 02 02 01 00 30 18 06 16
+2b 06 01 04 01 82 db 35 85 1a 83 7d 58 01 01 02
+01 03 0e 03 02 1a 30 00 30 22 18 0f 32 30 31 35
+31 30 31 36 31 32 34 32 31 31 5a 18 0f 32 30 31
+35 31 30 31 36 31 32 34 37 31 31 5a 30 00 30 82
+01 69 30 12 06 10 2b 06 01 04 01 82 db 35 85 1a
+83 7d 58 01 01 01 03 82 01 51 00 61 82 01 4c 30
+82 01 48 a0 03 02 01 05 a1 0b 1b 09 41 52 50 41
+32 2e 4e 45 54 a2 21 30 1f a0 03 02 01 01 a1 18
+30 16 1b 04 78 6d 70 70 1b 0e 78 6d 70 70 2e 61
+72 70 61 32 2e 6e 65 74 a3 82 01 0f 30 82 01 0b
+a0 03 02 01 12 a1 03 02 01 03 a2 81 fe 04 81 fb
+23 60 de b8 9f 15 9f 51 d6 95 8a c1 02 7b 85 dd
+ad 8d 73 98 a1 62 c7 85 26 bb a3 d9 45 f4 ce 05
+fe f6 ef 24 34 b5 f5 37 98 65 a9 91 e5 78 aa 05
+02 f1 53 55 29 71 60 09 6a 7f af ab 01 68 a3 e8
+84 84 97 db 21 7c 60 a5 e2 4d 4a 97 8d 43 cc 04
+fb 88 88 87 77 3e 70 7c c3 75 9d 09 02 fc aa d7
+7e 0b 9d 0b c9 69 99 6f 56 19 c7 6a 02 4b ae 2b
+ed 32 52 8b e6 5c ef 95 27 de 28 39 8a 00 8e 07
+7d 7b 81 cf df 0a e9 db bb 0f 0a 0a 59 48 ef c5
+09 e1 10 73 f0 45 01 c2 cd d6 91 4b c6 c6 b0 c0
+3c 8c 9e bc 83 fe f3 ab 2c fe 99 14 81 aa 92 37
+47 50 5b 0b fc 62 8c c1 cb 85 f1 37 db 6b e0 7c
+d7 eb 71 4c 95 86 2d 32 8b ec 61 d6 75 3a a5 f3
+f5 1c 71 db 17 8b 75 5f 78 a7 78 a5 0c 1b 5f c2
+26 21 12 08 27 11 87 cb fc 2e 31 73 28 64 95 19
+a1 f1 e2 75 14 5e 93 44 24 3d 86
+-----END TO-BE-SIGNED-CERTIFICATE HEXDUMP-----
+
+SHA1(tbscert) = 2d 8f bd 0b 45 17 24 60 01 0c 6d d2 aa 61 37 30 93 43 17 b9
+
+-----BEGIN CERTIFICATE HEXDUMP-----
+30 82 02 67 30 82 01 b7 a0 03 02 01 02 02 01 00
+30 18 06 16 2b 06 01 04 01 82 db 35 85 1a 83 7d
+58 01 01 02 01 03 0e 03 02 1a 30 00 30 22 18 0f
+32 30 31 35 31 30 31 36 31 32 34 32 31 31 5a 18
+0f 32 30 31 35 31 30 31 36 31 32 34 37 31 31 5a
+30 00 30 82 01 69 30 12 06 10 2b 06 01 04 01 82
+db 35 85 1a 83 7d 58 01 01 01 03 82 01 51 00 61
+82 01 4c 30 82 01 48 a0 03 02 01 05 a1 0b 1b 09
+41 52 50 41 32 2e 4e 45 54 a2 21 30 1f a0 03 02
+01 01 a1 18 30 16 1b 04 78 6d 70 70 1b 0e 78 6d
+70 70 2e 61 72 70 61 32 2e 6e 65 74 a3 82 01 0f
+30 82 01 0b a0 03 02 01 12 a1 03 02 01 03 a2 81
+fe 04 81 fb 23 60 de b8 9f 15 9f 51 d6 95 8a c1
+02 7b 85 dd ad 8d 73 98 a1 62 c7 85 26 bb a3 d9
+45 f4 ce 05 fe f6 ef 24 34 b5 f5 37 98 65 a9 91
+e5 78 aa 05 02 f1 53 55 29 71 60 09 6a 7f af ab
+01 68 a3 e8 84 84 97 db 21 7c 60 a5 e2 4d 4a 97
+8d 43 cc 04 fb 88 88 87 77 3e 70 7c c3 75 9d 09
+02 fc aa d7 7e 0b 9d 0b c9 69 99 6f 56 19 c7 6a
+02 4b ae 2b ed 32 52 8b e6 5c ef 95 27 de 28 39
+8a 00 8e 07 7d 7b 81 cf df 0a e9 db bb 0f 0a 0a
+59 48 ef c5 09 e1 10 73 f0 45 01 c2 cd d6 91 4b
+c6 c6 b0 c0 3c 8c 9e bc 83 fe f3 ab 2c fe 99 14
+81 aa 92 37 47 50 5b 0b fc 62 8c c1 cb 85 f1 37
+db 6b e0 7c d7 eb 71 4c 95 86 2d 32 8b ec 61 d6
+75 3a a5 f3 f5 1c 71 db 17 8b 75 5f 78 a7 78 a5
+0c 1b 5f c2 26 21 12 08 27 11 87 cb fc 2e 31 73
+28 64 95 19 a1 f1 e2 75 14 5e 93 44 24 3d 86 30
+18 06 16 2b 06 01 04 01 82 db 35 85 1a 83 7d 58
+01 01 02 01 03 0e 03 02 1a 03 81 8f 00 30 81 8b
+a0 03 02 01 12 a2 81 83 04 81 80 ae ab e4 69 87
+51 25 ac 1b 6a 13 99 c1 23 60 08 b7 8a de 7b c3
+b1 b7 4e 0d b4 33 83 9c b7 cf 66 0b cc ab 90 b6
+96 1a 2e 81 7f ac c8 60 32 80 6c ba 8b 57 dc 31
+f8 5d c6 bf 82 65 c0 9a 29 2e 9d 27 7d eb e5 9c
+01 80 63 0f 6e 89 6d 47 d3 05 c6 05 56 d1 ad 1b
+0e 89 12 e2 02 7a ca a5 1d c4 4f 04 7f 39 1e 63
+f3 ee 69 5b ee fd 8b c4 45 0b 5c 3b 47 c8 96 78
+39 b5 45 3d 45 de c8 e9 de 26 6f
+-----END CERTIFICATE HEXDUMP-----
+
+shell$ klist
+
+Ticket cache: FILE:/tmp/krb5cc_p18990
+Default principal: rick@ARPA2.NET
+
+Valid starting     Expires            Service principal
+10/16/15 12:43:42  10/16/15 12:58:39  krbtgt/ARPA2.NET@ARPA2.NET
+10/16/15 12:44:11  10/16/15 12:58:39  xmpp/xmpp.arpa2.net@ARPA2.NET
+
